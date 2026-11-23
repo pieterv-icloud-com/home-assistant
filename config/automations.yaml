@@ -461,7 +461,7 @@
       pool_volume: 8000
       pump_flow_rate: 15000
       season_toggle: input_boolean.pool_season_toggle
-      maximum_run_time: 10
+      maximum_run_time: 4
 - id: '1794066924752'
   alias: Grid outage
   description: Grid outage using inverter grid power (no voltage sensor available).
