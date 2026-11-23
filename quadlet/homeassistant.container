@@ -1,0 +1,23 @@
+[Unit]
+Description=Home Assistant
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+Image=ghcr.io/home-assistant/home-assistant:2026.11.2
+ContainerName=homeassistant
+Network=host
+AddCapability=NET_ADMIN NET_RAW
+Volume=/home/pietervandermerwe/repos/home-assistant/config:/config:Z
+Volume=/etc/localtime:/etc/localtime:ro
+Volume=/etc/timezone:/etc/timezone:ro
+Volume=/run/dbus:/run/dbus:ro
+AddDevice=/dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_88acd065b30eef11891db42a433abf1e-if00-port0:/dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_88acd065b30eef11891db42a433abf1e-if00-port0
+EnvironmentFile=/home/pietervandermerwe/repos/home-assistant/quadlet/homeassistant.env
+
+[Service]
+Restart=always
+TimeoutStartSec=300
+
+[Install]
+WantedBy=multi-user.target

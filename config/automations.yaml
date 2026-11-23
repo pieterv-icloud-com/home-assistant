@@ -1,0 +1,567 @@
+- id: '1790934203011'
+  alias: Living Area
+  description: ''
+  triggers:
+  - trigger: occupancy.detected
+    target:
+      entity_id: binary_sensor.sonoff_snzb_06p24
+    options:
+      behavior: each
+      for: 00:00:00
+    id: generated-7h7d
+  - trigger: occupancy.cleared
+    target:
+      entity_id: binary_sensor.sonoff_snzb_06p24
+    options:
+      behavior: each
+      for: 00:10:00
+    id: generated-9yMM
+  conditions:
+  - condition: illuminance.is_value
+    target:
+      entity_id: sensor.sonoff_snzb_06p24_illuminance
+    options:
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          number: 15
+  - condition: switch.is_off
+    target:
+      entity_id: input_boolean.mia_visiting
+    options:
+      behavior: any
+      for: 00:00:00
+  - condition: template
+    value_template: '{{ is_state(''sun.sun'', ''below_horizon'') }}'
+  actions:
+  - if:
+    - condition: trigger
+      id:
+      - generated-7h7d
+    then:
+    - if:
+      - condition: time
+        after: '18:00:00'
+        before: '22:00:00'
+      - condition: light.is_off
+        target:
+          entity_id:
+          - light.light
+          - light.vintage
+        options:
+          behavior: any
+          for: 00:00:00
+      then:
+      - action: light.turn_on
+        metadata: {}
+        target:
+          entity_id:
+          - light.light
+          - light.vintage
+        data:
+          brightness_pct: 50
+      else:
+      - if:
+        - condition: time
+          after: '22:00:00'
+          before: 07:00:00
+        - condition: light.is_off
+          target:
+            entity_id:
+            - light.living_area_wall
+            - light.living_area_wall_2
+          options:
+            behavior: any
+            for: 00:00:00
+        then:
+        - action: light.turn_on
+          metadata: {}
+          data:
+            brightness_pct: 5
+          target:
+            entity_id:
+            - light.living_area_wall_2
+            - light.living_area_wall
+    else:
+    - if:
+      - condition: trigger
+        id:
+        - generated-9yMM
+      then:
+      - if:
+        - condition: time
+          after: '18:00:00'
+          before: '22:00:00'
+        - condition: light.is_on
+          target:
+            entity_id:
+            - light.light
+            - light.vintage
+          options:
+            behavior: any
+            for: 00:00:00
+        then:
+        - action: light.turn_off
+          metadata: {}
+          target:
+            entity_id:
+            - light.light
+            - light.vintage
+          data: {}
+        else:
+        - if:
+          - condition: time
+            after: '22:00:00'
+            before: 07:00:00
+          - condition: light.is_on
+            target:
+              entity_id:
+              - light.living_area_wall
+              - light.living_area_wall_2
+            options:
+              behavior: any
+              for: 00:00:00
+          then:
+          - action: light.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id:
+              - light.living_area_wall_2
+              - light.living_area_wall
+  mode: restart
+- id: '1790966526539'
+  alias: Pantry
+  description: ''
+  triggers:
+  - trigger: occupancy.cleared
+    target:
+      entity_id: binary_sensor.kitchen_pantry_occupancy
+    options:
+      behavior: each
+      for: 00:00:00
+  - trigger: occupancy.detected
+    target:
+      entity_id: binary_sensor.kitchen_pantry_occupancy
+    options:
+      behavior: each
+      for: 00:00:00
+    id: generated-65Lh
+  conditions: []
+  actions:
+  - if:
+    - condition: trigger
+      id:
+      - generated-65Lh
+    - condition: light.is_off
+      target:
+        entity_id: light.kitchen_pantry
+      options:
+        behavior: any
+        for: 00:00:00
+    then:
+    - action: light.turn_on
+      metadata: {}
+      target:
+        entity_id: light.kitchen_pantry
+      data: {}
+    else:
+    - action: light.turn_off
+      metadata: {}
+      target:
+        entity_id: light.kitchen_pantry
+      data: {}
+  mode: restart
+- id: '1791002979204'
+  alias: Pieter's Bathroom
+  description: ''
+  triggers:
+  - trigger: occupancy.detected
+    target:
+      entity_id: binary_sensor.pieters_room_pieter_s_bathroom_occupancy
+    options:
+      behavior: each
+      for: 00:00:00
+  conditions:
+  - condition: illuminance.is_value
+    target:
+      entity_id: sensor.pieters_room_pieter_s_bathroom_illuminance
+    options:
+      behavior: any
+      for: 00:00:00
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          number: 15
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    target:
+      entity_id: light.pieter_bathroom
+    data:
+      brightness_pct: 80
+  - delay:
+      hours: 0
+      minutes: 3
+      seconds: 0
+      milliseconds: 0
+  - action: light.turn_off
+    metadata: {}
+    target:
+      entity_id: light.pieter_bathroom
+    data: {}
+  mode: restart
+- id: '1791005694857'
+  alias: Irrigation
+  description: ''
+  triggers:
+  - trigger: sun.sunrise
+    options:
+      offset:
+        days: 0
+        hours: 0
+        minutes: 0
+        seconds: 0
+  conditions:
+  - condition: time
+    weekday:
+    - sun
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      entity_id: switch.sonoff_swv
+    data: {}
+  - delay:
+      hours: 0
+      minutes: 20
+      seconds: 0
+      milliseconds: 0
+  - action: switch.turn_off
+    metadata: {}
+    target:
+      entity_id: switch.sonoff_swv
+    data: {}
+  mode: queued
+  max: 2
+- id: '1791009339191'
+  alias: Sun Room
+  description: ''
+  triggers:
+  - trigger: occupancy.detected
+    target:
+      entity_id: binary_sensor.sunroom_occupancy
+    options:
+      behavior: each
+      for: 00:00:00
+  conditions:
+  - condition: illuminance.is_value
+    target:
+      entity_id: sensor.sunroom_occupancy_illuminance
+    options:
+      threshold:
+        type: below
+        value:
+          active_choice: number
+          number: 20
+  - condition: time
+    before: '22:00:00'
+    after: '18:00:00'
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 80
+    target:
+      entity_id:
+      - light.sun_room_vintage
+      - light.shellyvintage_98cdac1eb4a8
+  mode: restart
+- id: '1791013063751'
+  alias: Washing Area
+  description: ''
+  triggers:
+  - trigger: occupancy.detected
+    target:
+      entity_id: binary_sensor.sonoff_snzb_06p
+    options:
+      behavior: each
+      for: 00:00:00
+    id: generated-zXh2
+  - trigger: occupancy.cleared
+    target:
+      entity_id: binary_sensor.sonoff_snzb_06p
+    options:
+      behavior: each
+      for: 00:00:00
+    id: generated-O3vI
+  conditions:
+  - condition: template
+    value_template: '{{ is_state(''sun.sun'', ''below_horizon'') }}'
+  actions:
+  - if:
+    - condition: trigger
+      id:
+      - generated-zXh2
+    - condition: time
+      before: '22:00:00'
+      after: '18:00:00'
+    - condition: light.is_off
+      target:
+        entity_id:
+        - light.spotlight
+        - light.kitchen_spotlight
+      options:
+        behavior: any
+        for: 00:00:00
+    then:
+    - action: light.turn_on
+      metadata: {}
+      target:
+        entity_id:
+        - light.spotlight
+        - light.kitchen_spotlight
+      data:
+        brightness_pct: 50
+    else:
+    - if:
+      - condition: trigger
+        id:
+        - generated-zXh2
+      - condition: time
+        after: '22:00:00'
+        before: 07:00:00
+      - condition: light.is_off
+        target:
+          entity_id: light.lumi_lumi_dimmer_rcbac1
+        options:
+          behavior: any
+          for: 00:00:00
+      then:
+      - action: light.turn_on
+        metadata: {}
+        target:
+          entity_id: light.lumi_lumi_dimmer_rcbac1
+        data:
+          brightness_pct: 40
+  - if:
+    - condition: trigger
+      id:
+      - generated-O3vI
+    - condition: time
+      after: '18:00:00'
+      before: '22:00:00'
+    - condition: light.is_on
+      target:
+        entity_id:
+        - light.spotlight
+        - light.kitchen_spotlight
+      options:
+        behavior: any
+        for: 00:00:00
+    then:
+    - action: light.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+        - light.spotlight
+        - light.kitchen_spotlight
+    else:
+    - if:
+      - condition: trigger
+        id:
+        - generated-O3vI
+      - condition: time
+        after: '22:00:00'
+        before: 07:00:00
+      - condition: light.is_on
+        target:
+          entity_id: light.lumi_lumi_dimmer_rcbac1
+        options:
+          behavior: any
+          for: 00:00:00
+      then:
+      - action: light.turn_off
+        metadata: {}
+        target:
+          entity_id: light.lumi_lumi_dimmer_rcbac1
+        data: {}
+  mode: restart
+- id: '1791486955514'
+  alias: Mac Mini
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.mac_mini_active
+    from:
+    to:
+    - 'on'
+  conditions: []
+  actions:
+  - action: media_player.turn_on
+    metadata: {}
+    target:
+      entity_id: media_player.pieter_s_study_samsung
+    data: {}
+  - action: wake_on_lan.send_magic_packet
+    data:
+      mac: b8:b4:09:e6:19:56
+  mode: queued
+  max: 10
+- id: '1793887364809'
+  alias: Pool
+  description: ''
+  triggers:
+  - trigger: time
+    at: '18:00:00'
+    weekday:
+    - sun
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    target:
+      entity_id: switch.basic_1gsp_sonoff_1002c2ac75_1
+    data: {}
+  - delay:
+      hours: 4
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - action: switch.turn_off
+    metadata: {}
+    target:
+      entity_id: switch.basic_1gsp_sonoff_1002c2ac75_1
+    data: {}
+  mode: queued
+  max: 10
+- id: '1794023631559'
+  alias: Pool Pump Scheduler
+  description: ''
+  use_blueprint:
+    path: swingerman/pool-pump-scheduler.yaml
+    input:
+      pool_pump: switch.basic_1gsp_sonoff_1002c2ac75_1
+      pool_volume: 8000
+      pump_flow_rate: 15000
+      season_toggle: input_boolean.pool_season_toggle
+      maximum_run_time: 10
+- id: '1794066924752'
+  alias: Grid outage
+  description: Grid outage using inverter grid power (no voltage sensor available).
+  use_blueprint:
+    path: Pr0t3ct0r/grid_outage.yaml
+    input:
+      grid_voltage: sensor.inverter_2212026248_grid_power
+      outage_helper: input_boolean.grid_outage
+      off_below: 50
+      off_for:
+        minutes: 60
+      on_above: 50
+      on_for:
+        minutes: 2
+      battery_soc: sensor.battery_2212026248_state_of_charge
+      shed_below: 100
+      restore_above: 0
+      shed_loads: []
+      restore_loads: []
+      check_after: 30
+      notify_entities: []
+      notify_action: ''
+- id: '1794450842673'
+  alias: Gate
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.ewelink_snzb_04p
+    from:
+    - 'off'
+    to:
+    - 'on'
+  conditions:
+  - condition: template
+    value_template: '{{ is_state(''sun.sun'', ''below_horizon'') }}'
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    target:
+      entity_id:
+      - light.garden_ewelink_ck_bl702_al_01_7009_z102lg031
+      - light.kitchen_backdoor_light
+      - light.ewelink_ck_bl702_al_01_7009_z102lg03_1
+    data: {}
+  - delay:
+      hours: 0
+      minutes: 10
+      seconds: 0
+      milliseconds: 0
+  - action: light.turn_off
+    metadata: {}
+    target:
+      entity_id:
+      - light.garden_ewelink_ck_bl702_al_01_7009_z102lg031
+      - light.kitchen_backdoor_light
+      - light.ewelink_ck_bl702_al_01_7009_z102lg03_1
+    data: {}
+  mode: single
+- id: '1795323218786'
+  alias: Living Area - Sunrise
+  description: ''
+  triggers:
+  - trigger: sun.sunrise
+    options:
+      offset:
+        days: 0
+        hours: 0
+        minutes: 0
+        seconds: 0
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    target:
+      entity_id:
+      - light.living_area_wall
+      - light.living_area_wall_2
+      - light.light
+      - light.vintage
+    data: {}
+  mode: single
+- id: '1795323447736'
+  alias: Kitchen - Sunrise
+  description: ''
+  triggers:
+  - trigger: sun.sunrise
+    options:
+      offset:
+        days: 0
+        hours: 0
+        minutes: 0
+        seconds: 0
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    target:
+      entity_id:
+      - light.lumi_lumi_dimmer_rcbac1
+      - light.tz3210_xwqng7ol_ts0502b
+    data: {}
+  mode: single

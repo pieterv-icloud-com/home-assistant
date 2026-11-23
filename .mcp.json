@@ -1,0 +1,18 @@
+{
+	"mcpServers": {
+		"context7": {
+			"type": "http",
+			"url": "https://mcp.context7.com/mcp",
+			"tools": [
+				"*"
+			]
+		},
+		"ha-mcp": {
+			"type": "http",
+			"url": "http://localhost:9584/private_xxi8jJBy3IHwqnWLKVX6wQ",
+			"tools": [
+				"*"
+			]
+		}
+	}
+}

@@ -1,0 +1,15 @@
+/config/.cache/
+/config/.cloud/
+/config/.ha_mcp/
+/config/.storage/
+/config/backups/
+/config/blueprints/
+/config/custom_components/
+/config/deps/
+/config/tts/
+/config/www/
+/config/zha_quirks/
+/config/*.log*
+/config/*.db*
+*.lock
+*lock.json

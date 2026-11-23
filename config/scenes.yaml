@@ -1,0 +1,22 @@
+- id: '1791564581047'
+  name: Vintage Lights
+  entities:
+    light.shellyvintage_98cdac1eb4a8:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 204
+      icon: mdi:ceiling-light
+      friendly_name: Vintage
+      supported_features: 32
+      state: 'on'
+    light.sun_room_vintage:
+      supported_color_modes:
+      - brightness
+      icon: mdi:ceiling-light
+      friendly_name: Vintage
+      supported_features: 32
+      color_mode: brightness
+      brightness: 204
+      state: 'on'
+  metadata: {}
