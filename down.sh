@@ -17,7 +17,7 @@ cd "$SCRIPT_DIR"
 
 log "Disabling Tailscale Funnel on port $HA_PORT"
 funnel_failed=0
-if ! sudo tailscale funnel --bg "$HA_PORT" off; then
+if ! sudo tailscale funnel reset; then
     printf 'warning: failed to disable Tailscale Funnel\n' >&2
     funnel_failed=1
 fi
