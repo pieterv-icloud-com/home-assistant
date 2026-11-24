@@ -4,7 +4,7 @@ Wants=network-online.target
 After=network-online.target
 
 [Container]
-Image=ghcr.io/home-assistant/home-assistant:2026.11.2
+Image=ghcr.io/home-assistant/home-assistant:2026.11.3
 ContainerName=homeassistant
 Network=host
 AddCapability=NET_ADMIN NET_RAW
